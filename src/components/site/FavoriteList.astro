@@ -4,17 +4,10 @@ import { cn } from '@/utils/cn';
 import { withAsset } from '@/utils/base';
 import type { Favorite } from '@/data/about';
 
-/**
- * Favorite list with a floating image preview on hover.
- *
- * Each row owns its preview, so the positioning runtime measures against the
- * right trigger and there is no cross-row state to keep in sync.
- */
 export interface Props {
   title: string;
   items: Favorite[];
   class?: string;
-  /** Gap between the hovered label and the preview, in px. */
   previewOffset?: number;
 }
 
@@ -30,15 +23,23 @@ const { title, items, class: className, previewOffset = 20 } = Astro.props;
         <li>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={item.imdbUrl ?? undefined} target={item.imdbUrl ? "_blank" : undefined} rel={item.imdbUrl ? "noopener noreferrer" : undefined} class="link-underline inline-flex cursor-pointer items-center gap-2 transition-opacity duration-300">
-                <img src={withAsset(item.image)} alt="" width="44" height="60" loading="lazy" class="h-15 w-11 rounded-lg object-cover" />
-                <span>{item.label}{item.imdbUrl ? " ↗" : ""}</span>
+              <a href={item.imdbUrl ?? undefined} target={item.imdbUrl ? '_blank' : undefined} rel={item.imdbUrl ? 'noopener noreferrer' : undefined} class="link-underline inline-flex cursor-pointer items-center gap-2 transition-opacity duration-300">
+                <img
+                  src={withAsset(item.image)}
+                  alt=""
+                  width="44"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  class="block h-[60px] w-[44px] shrink-0 rounded-lg object-cover object-center"
+                />
+                <span>{item.label}{item.imdbUrl ? ' ↗' : ''}</span>
               </a>
             </TooltipTrigger>
             <TooltipContent
               side="right"
               style={`margin-left:${previewOffset}px`}
-              class="pointer-events-none h-45 w-70 overflow-hidden rounded-lg border-0 bg-transparent p-0 shadow-2xl"
+              class="pointer-events-none h-[180px] w-[280px] overflow-hidden rounded-lg border-0 bg-transparent p-0 shadow-2xl"
             >
               <img
                 src={withAsset(item.image)}
@@ -47,7 +48,7 @@ const { title, items, class: className, previewOffset = 20 } = Astro.props;
                 height="180"
                 loading="lazy"
                 decoding="async"
-                class="size-full object-cover"
+                class="block h-full w-full object-cover object-center"
               />
             </TooltipContent>
           </Tooltip>
